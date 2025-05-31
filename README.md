@@ -34,16 +34,16 @@ pnpm build:standalone
 
 ```bash
 # Basic usage
-./standalone/dupf /path/to/images
+./dupf /path/to/images
 
 # Dry run (show what would be moved without actually moving)
-./standalone/dupf /path/to/images --dry-run --verbose
+./dupf /path/to/images --dry-run --verbose
 
 # Custom duplicate folder name
-./standalone/dupf /path/to/images --output-dir duplicates
+./dupf /path/to/images --output-dir duplicates
 
 # Show help
-./standalone/dupf --help
+./dupf --help
 ```
 
 ## Installation Methods
@@ -153,35 +153,6 @@ pnpm lint
 pnpm format
 ```
 
-### Project Structure
-
-```
-├── bin/dupf.ts                      # CLI entry point
-├── lib/
-│   ├── image-comparator.ts          # Image comparison logic
-│   └── file-utils.ts                # File operation utilities
-├── tests/
-│   ├── unit/                        # Unit tests
-│   ├── integration/                 # Integration tests
-│   └── features/images/              # Test images
-├── docs/
-│   └── README-ja.md                 # Japanese README
-├── dist/                            # TypeScript build output
-├── standalone/                      # Single-file executable
-│   └── dupf                         # Standalone executable
-└── ...configuration files
-```
-
-### Tech Stack
-
-- **Language**: TypeScript (ES2022)
-- **Runtime**: Node.js 18+
-- **Image Processing**: Sharp (with fallback functionality)
-- **CLI**: Commander.js
-- **Testing**: Vitest (42 tests)
-- **Build**: @vercel/ncc
-- **Quality Management**: ESLint, Prettier
-
 ### Testing
 
 ```bash
@@ -211,7 +182,7 @@ pnpm test tests/unit
 
 ### Standalone Version Benefits
 
-- **Single File**: `./standalone/dupf` (~397KB)
+- **Single File**: `./standalone/dupf`
 - **No Dependencies**: No Node.js required, runs immediately
 - **Portable**: Can be copied and run on any machine
 - **Simple**: No installation or configuration required

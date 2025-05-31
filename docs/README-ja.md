@@ -150,35 +150,6 @@ pnpm lint
 pnpm format
 ```
 
-### プロジェクト構造
-
-```
-├── bin/dupf.ts          # CLI エントリーポイント
-├── lib/
-│   ├── image-comparator.ts          # 画像比較ロジック
-│   └── file-utils.ts                # ファイル操作ユーティリティ
-├── tests/
-│   ├── unit/                        # ユニットテスト
-│   ├── integration/                 # 統合テスト
-│   └── features/images/              # テスト用画像
-├── docs/
-│   └── README-ja.md                 # 日本語版README
-├── dist/                            # TypeScript ビルド出力
-├── standalone/                      # 単一ファイル実行可能ファイル
-│   └── dupf             # スタンドアロン実行ファイル
-└── ...設定ファイル
-```
-
-### 技術スタック
-
-- **言語**: TypeScript (ES2022)
-- **ランタイム**: Node.js 18+
-- **画像処理**: Sharp
-- **CLI**: Commander.js
-- **テスト**: Vitest
-- **ビルド**: @vercel/ncc
-- **品質管理**: ESLint, Prettier
-
 ### テスト
 
 ```bash
@@ -208,7 +179,7 @@ pnpm test tests/unit
 
 ### スタンドアロン版の利点
 
-- **単一ファイル**: `./standalone/dupf` (約678KB)
+- **単一ファイル**: `./standalone/dupf`
 - **依存関係なし**: Node.js不要、即座に実行可能
 - **ポータブル**: どのマシンにもコピーして実行可能
 - **シンプル**: インストール不要、設定不要
