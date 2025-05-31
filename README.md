@@ -72,14 +72,14 @@ node dist/bin/dupf.js /path/to/images
 
 ## Command Options
 
-| Option | Description | Example |
-|--------|-------------|---------|
-| `<directory>` | Target directory to scan (required) | `./photos` |
-| `--dry-run, -d` | Dry run (no file movement) | `--dry-run` |
-| `--verbose, -v` | Detailed output | `--verbose` |
+| Option             | Description                                | Example                   |
+| ------------------ | ------------------------------------------ | ------------------------- |
+| `<directory>`      | Target directory to scan (required)        | `./photos`                |
+| `--dry-run, -d`    | Dry run (no file movement)                 | `--dry-run`               |
+| `--verbose, -v`    | Detailed output                            | `--verbose`               |
 | `--output-dir, -o` | Duplicate folder name (default: duplicate) | `--output-dir duplicates` |
-| `--help, -h` | Show help | `--help` |
-| `--version, -V` | Show version | `--version` |
+| `--help, -h`       | Show help                                  | `--help`                  |
+| `--version, -V`    | Show version                               | `--version`               |
 
 ## Usage Examples
 
@@ -258,29 +258,3 @@ chmod +x ./standalone/dupf
 
 - Check supported formats: JPG, JPEG, PNG, GIF, BMP, WebP, TIFF
 - Verify file extensions are correct
-
-## License
-
-MIT License
-
-## Contributing
-
-We welcome pull requests and issue reports. When participating in development:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Create a pull request
-
-## Changelog
-
-### v1.0.0
-
-- Initial release
-- Full TypeScript support
-- Standalone executable (~397KB)
-- Comprehensive test suite (42 tests)
-- ESLint + Prettier support
-- Sharp dependency fallback functionality
-- Robust error handling
