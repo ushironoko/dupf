@@ -187,6 +187,12 @@ pnpm test
 # テスト UI
 pnpm test:ui
 
+# テスト用画像を生成（初回テスト前に必要） - TypeScriptを直接実行
+pnpm test:setup
+
+# 完全なテストワークフロー（セットアップ + テスト実行）- より高速
+pnpm test:full
+
 # 統合テストのみ
 pnpm test tests/integration
 

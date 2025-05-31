@@ -74,6 +74,12 @@ pnpm test
 # Run specific test file
 pnpm test tests/unit/image-comparator.test.ts
 
+# Setup test images (required before first test run) - runs TypeScript directly
+pnpm test:setup
+
+# Run complete test workflow (faster, no build step needed)
+pnpm test:full
+
 # Code formatting and linting
 pnpm lint
 pnpm format
@@ -244,6 +250,8 @@ pnpm format
 - **Run all tests**: `pnpm test:run`
 - **Run tests in watch mode**: `pnpm test`
 - **Run tests with UI**: `pnpm test:ui`
+- **Setup test images**: `pnpm test:setup` (runs TypeScript directly with tsx)
+- **Complete test workflow**: `pnpm test:full` (setup + run tests)
 
 ### Distribution & Deployment
 

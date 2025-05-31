@@ -33,6 +33,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
+    "test:setup": "tsx scripts/create-test-images.ts",
+    "test:full": "pnpm test:setup && pnpm test:run",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "format": "prettier --write ."

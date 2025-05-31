@@ -1,13 +1,16 @@
 import sharp from 'sharp';
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 async function createTestImages(): Promise<void> {
-  const testDir = path.join(__dirname, '../tests/features/images');
+  const testDir = path.join(process.cwd(), 'tests', 'features', 'images');
+
+  // Remove existing test images directory completely
+  try {
+    await fs.rm(testDir, { recursive: true, force: true });
+  } catch (error) {
+    // Ignore error if directory doesn't exist
+  }
 
   // Ensure test directory exists
   await fs.mkdir(testDir, { recursive: true });
