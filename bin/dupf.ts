@@ -15,7 +15,7 @@ interface CliOptions {
 const program = new Command();
 
 program
-  .name('duplicate-finder')
+  .name('dupf')
   .description('Find and move duplicate images to a duplicate folder')
   .version('1.0.0')
   .argument('<directory>', 'Directory to scan for duplicate images')

@@ -15,7 +15,7 @@ interface CliResult {
 
 describe('CLI Integration Tests', () => {
   const testDir = path.join(__dirname, '../temp-cli');
-  const cliPath = path.join(__dirname, '../../dist/bin/duplicate-finder.js');
+  const cliPath = path.join(__dirname, '../../dist/bin/dupf.js');
 
   beforeAll(async () => {
     // Create test directory
@@ -138,7 +138,7 @@ describe('CLI Integration Tests', () => {
       const result = await runCLI(['--help']);
 
       expect(result.code).toBe(0);
-      expect(result.stdout).toContain('duplicate-finder');
+      expect(result.stdout).toContain('dupf');
       expect(result.stdout).toContain('Find and move duplicate images');
     });
 
