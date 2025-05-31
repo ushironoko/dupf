@@ -18,7 +18,7 @@ TypeScriptで構築された高性能な画像重複検出CLIツールです。�
 ```bash
 # リポジトリをクローン
 git clone <repository-url>
-cd image-dupf
+cd dupf
 
 # 依存関係をインストール
 pnpm install
