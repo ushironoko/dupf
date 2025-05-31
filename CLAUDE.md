@@ -8,29 +8,58 @@ This is an Image Duplicate Finder CLI tool that scans directories for duplicate 
 
 ## Usage
 
+### Quick Start (Recommended)
+
+For end users who just want to use the tool:
+
+```bash
+# 1. Clone or download the repository
+git clone <repository-url>
+cd image-duplicate-finder
+
+# 2. Install dependencies and build standalone executable
+pnpm install
+pnpm build:standalone
+
+# 3. Use the tool (no further Node.js installation needed)
+./standalone/duplicate-finder /path/to/your/images --dry-run --verbose
+```
+
+The standalone executable (`./standalone/duplicate-finder`) can be copied to any machine and used without requiring Node.js installation.
+
 ### Basic Commands
 
 ```bash
-# Install dependencies
+# Install dependencies (for development)
 pnpm install
 
-# Build the project
-pnpm build
+# Build standalone executable (recommended for distribution)
+pnpm build:standalone
 
-# Find and move duplicates (using built version)
-node dist/bin/duplicate-finder.js /path/to/images
+# Run standalone version (no Node.js required on target machine)
+./standalone/duplicate-finder /path/to/images
+
+# Dry run to see what would be moved
+./standalone/duplicate-finder /path/to/images --dry-run --verbose
+
+# Custom duplicate folder name
+./standalone/duplicate-finder /path/to/images --output-dir duplicates
+
+# Help
+./standalone/duplicate-finder --help
+```
+
+### Development Commands
+
+```bash
+# Build TypeScript only
+pnpm build
 
 # Development mode (using TypeScript directly)
 pnpm dev /path/to/images
 
-# Dry run to see what would be moved
-node dist/bin/duplicate-finder.js /path/to/images --dry-run --verbose
-
-# Custom duplicate folder name
-node dist/bin/duplicate-finder.js /path/to/images --output-dir duplicates
-
-# Help
-node dist/bin/duplicate-finder.js --help
+# Run built version (requires Node.js)
+node dist/bin/duplicate-finder.js /path/to/images
 ```
 
 ### Testing
@@ -210,6 +239,27 @@ pnpm format
 - **Run all tests**: `pnpm test:run`
 - **Run tests in watch mode**: `pnpm test`
 - **Run tests with UI**: `pnpm test:ui`
+
+### Distribution & Deployment
+
+For distributing the tool to end users:
+
+```bash
+# Build the standalone executable
+pnpm build:standalone
+
+# The following file can be distributed independently:
+# ./standalone/duplicate-finder (678KB, self-contained)
+
+# Users can run it directly without any installation:
+./standalone/duplicate-finder /path/to/images
+```
+
+**Distribution advantages:**
+- Single file deployment (678KB)
+- No Node.js runtime required on target machines
+- No dependency installation needed
+- Works on any compatible system architecture
 
 ### Important Notes
 
