@@ -1,90 +1,93 @@
 # dupf (Duplicate Finder)
 
-TypeScriptで構築された高性能な画像重複検出CLIツールです。ディレクトリ内の重複画像を検出し、安全にduplicateフォルダへ移動します。
+A high-performance image duplicate detection CLI tool built with TypeScript. Scans directories for duplicate images and safely moves them to a duplicate folder.
 
-## 特徴
+[日本語版 README はこちら](./docs/README-ja.md)
 
-- 🚀 **スタンドアロン実行ファイル**: Node.js不要の単一ファイル実行可能
-- 🔍 **高精度検出**: ハッシュベース + バイト単位比較による確実な重複検出
-- 🎯 **多様な画像形式対応**: JPG, JPEG, PNG, GIF, BMP, WebP, TIFF
-- 🛡️ **安全な操作**: ドライラン機能、ファイル名衝突回避、エラーハンドリング
-- ⚡ **高性能**: キャッシュ機能、メモリ効率化、大量ファイル対応
-- 🧪 **品質保証**: TypeScript、ESLint、包括的テスト、CI/CD対応
+## Features
 
-## クイックスタート
+- 🚀 **Standalone Executable**: Single-file executable without Node.js dependency (~397KB)
+- 🔍 **High-Precision Detection**: Reliable duplicate detection using hash-based + byte-level comparison
+- 🎯 **Multiple Image Format Support**: JPG, JPEG, PNG, GIF, BMP, WebP, TIFF
+- 🛡️ **Safe Operations**: Dry-run mode, filename collision avoidance, error handling
+- ⚡ **High Performance**: Caching, memory optimization, large file support
+- 🧪 **Quality Assurance**: TypeScript, ESLint, comprehensive tests (42 tests), CI/CD ready
+- 🔧 **Robustness**: Automatic fallback functionality for Sharp dependencies
 
-### 1. プロジェクトのセットアップ
+## Quick Start
+
+### 1. Project Setup
 
 ```bash
-# リポジトリをクローン
+# Clone repository
 git clone <repository-url>
 cd dupf
 
-# 依存関係をインストール
+# Install dependencies
 pnpm install
 
-# スタンドアロン実行ファイルをビルド
+# Build standalone executable
 pnpm build:standalone
 ```
 
-### 2. 使用方法
+### 2. Usage
 
 ```bash
-# 基本的な使用方法
-./dupf /path/to/images
+# Basic usage
+./standalone/dupf /path/to/images
 
-# ドライラン（実際には移動せず、何が移動されるかを表示）
-./dupf /path/to/images --dry-run --verbose
+# Dry run (show what would be moved without actually moving)
+./standalone/dupf /path/to/images --dry-run --verbose
 
-# カスタム重複フォルダ名
-./dupf /path/to/images --output-dir duplicates
+# Custom duplicate folder name
+./standalone/dupf /path/to/images --output-dir duplicates
 
-# ヘルプを表示
-./dupf --help
+# Show help
+./standalone/dupf --help
 ```
 
-## インストール方法
+## Installation Methods
 
-### オプション1: スタンドアロン実行ファイル（推奨）
+### Option 1: Standalone Executable (Recommended)
 
 ```bash
-# ビルドのみ実行
+# Build only
 pnpm install
 pnpm build:standalone
 
-# 実行ファイルを他のマシンにコピー可能
-cp ./standalone/dupf /usr/local/bin/  # システム全体で使用
+# Copy executable to other machines
+cp ./standalone/dupf /usr/local/bin/  # For system-wide use
 ```
 
-### オプション2: Node.js環境での実行
+### Option 2: Node.js Environment Execution
 
 ```bash
-# 開発モード
+# Development mode
 pnpm dev /path/to/images
 
-# TypeScriptビルド後に実行
+# Run after TypeScript build
 pnpm build
 node dist/bin/dupf.js /path/to/images
 ```
 
-## コマンドオプション
+## Command Options
 
-| オプション         | 説明                                    | 例                        |
-| ------------------ | --------------------------------------- | ------------------------- |
-| `<directory>`      | スキャン対象ディレクトリ（必須）        | `./photos`                |
-| `--dry-run, -d`    | ドライラン（ファイル移動なし）          | `--dry-run`               |
-| `--verbose, -v`    | 詳細な出力                              | `--verbose`               |
-| `--output-dir, -o` | 重複フォルダ名（デフォルト: duplicate） | `--output-dir duplicates` |
-| `--help, -h`       | ヘルプ表示                              | `--help`                  |
-| `--version, -V`    | バージョン表示                          | `--version`               |
+| Option | Description | Example |
+|--------|-------------|---------|
+| `<directory>` | Target directory to scan (required) | `./photos` |
+| `--dry-run, -d` | Dry run (no file movement) | `--dry-run` |
+| `--verbose, -v` | Detailed output | `--verbose` |
+| `--output-dir, -o` | Duplicate folder name (default: duplicate) | `--output-dir duplicates` |
+| `--help, -h` | Show help | `--help` |
+| `--version, -V` | Show version | `--version` |
 
-## 実行例
+## Usage Examples
 
 ```bash
-# テスト用の画像フォルダで実行
+# Run on test image folder
 ./standalone/dupf ./test-images --dry-run --verbose
 
-# 出力例:
+# Output example:
 # Scanning directory: /home/user/test-images
 # Duplicate folder: duplicate
 # Dry run: Yes
@@ -101,17 +104,19 @@ node dist/bin/dupf.js /path/to/images
 # Dry run completed. 2 duplicate(s) would be moved.
 ```
 
-## 技術仕様
+## Technical Specifications
 
-### アルゴリズム
+### Algorithm
 
-1. **ファイル発見**: 対象ディレクトリを再帰的にスキャン
-2. **ハッシュ生成**: Sharp使用による8x8グレースケール画像のMD5ハッシュ
-3. **高速比較**: ハッシュベースでの初期スクリーニング
-4. **厳密検証**: バイト単位でのファイル内容比較
-5. **安全移動**: 衝突回避機能付きファイル移動
+1. **File Discovery**: Recursively scan target directory
+2. **Hash Generation**:
+   - **Primary method**: 8x8 grayscale image MD5 hash using Sharp (high precision)
+   - **Fallback method**: File-based MD5 hash for Sharp-incompatible environments
+3. **Fast Comparison**: Initial screening using hash-based comparison
+4. **Strict Verification**: Byte-level file content comparison
+5. **Safe Moving**: File movement with collision avoidance functionality
 
-### 対応画像形式
+### Supported Image Formats
 
 - JPEG (.jpg, .jpeg)
 - PNG (.png)
@@ -120,133 +125,162 @@ node dist/bin/dupf.js /path/to/images
 - WebP (.webp)
 - TIFF (.tiff, .tif)
 
-### パフォーマンス特性
+### Performance Characteristics
 
-- **メモリ効率**: ストリーミング処理による低メモリ使用
-- **キャッシュ機能**: 画像ハッシュのメモリキャッシュ
-- **大量ファイル対応**: 数万枚の画像でも効率的に処理
+- **Memory Efficiency**: Low memory usage through streaming processing
+- **Cache Functionality**: Memory cache for image hashes
+- **Large File Support**: Efficient processing of tens of thousands of images
 
-## 開発者向け情報
+## Developer Information
 
-### 開発環境構築
+### Development Environment Setup
 
 ```bash
-# 依存関係インストール
+# Install dependencies
 pnpm install
 
-# 開発モードで実行
+# Run in development mode
 pnpm dev /path/to/images
 
-# TypeScriptビルド
+# TypeScript build
 pnpm build
 
-# テスト実行
+# Run tests
 pnpm test:run
 
-# コード品質チェック
+# Code quality checks
 pnpm lint
 pnpm format
 ```
 
-### プロジェクト構造
+### Project Structure
 
 ```
-├── bin/dupf.ts          # CLI エントリーポイント
+├── bin/dupf.ts                      # CLI entry point
 ├── lib/
-│   ├── image-comparator.ts          # 画像比較ロジック
-│   └── file-utils.ts                # ファイル操作ユーティリティ
+│   ├── image-comparator.ts          # Image comparison logic
+│   └── file-utils.ts                # File operation utilities
 ├── tests/
-│   ├── unit/                        # ユニットテスト
-│   ├── integration/                 # 統合テスト
-│   └── features/images/              # テスト用画像
-├── dist/                            # TypeScript ビルド出力
-├── standalone/                      # 単一ファイル実行可能ファイル
-│   └── dupf             # スタンドアロン実行ファイル
-└── ...設定ファイル
+│   ├── unit/                        # Unit tests
+│   ├── integration/                 # Integration tests
+│   └── features/images/              # Test images
+├── docs/
+│   └── README-ja.md                 # Japanese README
+├── dist/                            # TypeScript build output
+├── standalone/                      # Single-file executable
+│   └── dupf                         # Standalone executable
+└── ...configuration files
 ```
 
-### 技術スタック
+### Tech Stack
 
-- **言語**: TypeScript (ES2022)
-- **ランタイム**: Node.js 18+
-- **画像処理**: Sharp
+- **Language**: TypeScript (ES2022)
+- **Runtime**: Node.js 18+
+- **Image Processing**: Sharp (with fallback functionality)
 - **CLI**: Commander.js
-- **テスト**: Vitest
-- **ビルド**: @vercel/ncc
-- **品質管理**: ESLint, Prettier
+- **Testing**: Vitest (42 tests)
+- **Build**: @vercel/ncc
+- **Quality Management**: ESLint, Prettier
 
-### テスト
+### Testing
 
 ```bash
-# 全テスト実行
+# Run all tests
 pnpm test:run
 
-# ウォッチモード
+# Watch mode
 pnpm test
 
-# テスト UI
+# Test UI
 pnpm test:ui
 
-# テスト用画像を生成（初回テスト前に必要） - TypeScriptを直接実行
+# Generate test images (required before first test run) - runs TypeScript directly
 pnpm test:setup
 
-# 完全なテストワークフロー（セットアップ + テスト実行）- より高速
+# Complete test workflow (setup + test execution) - faster
 pnpm test:full
 
-# 統合テストのみ
+# Integration tests only
 pnpm test tests/integration
 
-# ユニットテストのみ
+# Unit tests only
 pnpm test tests/unit
 ```
 
-## 配布
+## Distribution
 
-### スタンドアロン版の利点
+### Standalone Version Benefits
 
-- **単一ファイル**: `./standalone/dupf` (約678KB)
-- **依存関係なし**: Node.js不要、即座に実行可能
-- **ポータブル**: どのマシンにもコピーして実行可能
-- **シンプル**: インストール不要、設定不要
+- **Single File**: `./standalone/dupf` (~397KB)
+- **No Dependencies**: No Node.js required, runs immediately
+- **Portable**: Can be copied and run on any machine
+- **Simple**: No installation or configuration required
+- **Robustness**: Automatic fallback functionality for Sharp-incompatible environments
 
-### 配布方法
+### Distribution Methods
 
 ```bash
-# ビルド
+# Build
 pnpm build:standalone
 
-# ファイルをターゲットマシンにコピー
+# Copy file to target machine
 scp ./standalone/dupf user@target:/usr/local/bin/
 
-# 実行権限確認
+# Verify execution permissions
 chmod +x /usr/local/bin/dupf
 ```
 
-## トラブルシューティング
+## Troubleshooting
 
-### よくある問題
+### Common Issues
 
-**Q: Permission denied エラーが発生**
+**Q: Permission denied error occurs**
 
 ```bash
 chmod +x ./standalone/dupf
 ```
 
-**Q: 大量のファイルでメモリ不足**
+**Q: Memory shortage with large number of files**
 
 ```bash
-# 一度に処理するディレクトリを分割してください
+# Split directories to process one at a time
 ./standalone/dupf /path/to/photos/2023 --verbose
 ./standalone/dupf /path/to/photos/2024 --verbose
 ```
 
-**Q: Sharp関連のエラーが発生**
+**Q: Sharp-related errors occur**
 
-- ツールは自動的にフォールバック機能を使用します
-- Sharpが利用できない場合、ファイルベースハッシュに切り替わります
-- 警告メッセージが表示されますが、機能に問題はありません
+- The tool automatically uses fallback functionality
+- When Sharp is unavailable, it switches to file-based hashing
+- Warning messages will be displayed, but functionality is not affected
 
-**Q: 特定の画像形式が検出されない**
+**Q: Specific image formats are not detected**
 
-- 対応形式を確認: JPG, JPEG, PNG, GIF, BMP, WebP, TIFF
-- ファイル拡張子が正しいことを確認
+- Check supported formats: JPG, JPEG, PNG, GIF, BMP, WebP, TIFF
+- Verify file extensions are correct
+
+## License
+
+MIT License
+
+## Contributing
+
+We welcome pull requests and issue reports. When participating in development:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Create a pull request
+
+## Changelog
+
+### v1.0.0
+
+- Initial release
+- Full TypeScript support
+- Standalone executable (~397KB)
+- Comprehensive test suite (42 tests)
+- ESLint + Prettier support
+- Sharp dependency fallback functionality
+- Robust error handling
