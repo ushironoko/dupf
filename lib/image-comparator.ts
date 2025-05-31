@@ -1,4 +1,3 @@
-import sharp from 'sharp';
 import crypto from 'crypto';
 import fs from 'fs/promises';
 
@@ -9,9 +8,24 @@ interface DuplicatePair {
 
 class ImageComparator {
   private cache: Map<string, string>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private sharp: any = null;
+  private sharpInitialized: boolean = false;
 
   constructor() {
     this.cache = new Map();
+  }
+
+  private async initSharp(): Promise<void> {
+    if (this.sharpInitialized) return;
+
+    try {
+      this.sharp = (await import('sharp')).default;
+    } catch (error) {
+      console.warn('Sharp not available, using fallback hash method');
+      this.sharp = null;
+    }
+    this.sharpInitialized = true;
   }
 
   async getImageHash(imagePath: string): Promise<string | null> {
@@ -19,16 +33,27 @@ class ImageComparator {
       return this.cache.get(imagePath)!;
     }
 
-    try {
-      const buffer = await sharp(imagePath)
-        .resize(8, 8, { fit: 'fill' })
-        .greyscale()
-        .raw()
-        .toBuffer();
+    await this.initSharp();
 
-      const hash = crypto.createHash('md5').update(buffer).digest('hex');
-      this.cache.set(imagePath, hash);
-      return hash;
+    try {
+      if (this.sharp) {
+        // Use Sharp for high-quality image hashing
+        const buffer = await this.sharp(imagePath)
+          .resize(8, 8, { fit: 'fill' })
+          .greyscale()
+          .raw()
+          .toBuffer();
+
+        const hash = crypto.createHash('md5').update(buffer).digest('hex');
+        this.cache.set(imagePath, hash);
+        return hash;
+      } else {
+        // Fallback to file-based hash when Sharp is not available
+        const buffer = await fs.readFile(imagePath);
+        const hash = crypto.createHash('md5').update(buffer).digest('hex');
+        this.cache.set(imagePath, hash);
+        return hash;
+      }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
