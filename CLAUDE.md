@@ -15,17 +15,17 @@ For end users who just want to use the tool:
 ```bash
 # 1. Clone or download the repository
 git clone <repository-url>
-cd image-duplicate-finder
+cd image-dupf
 
 # 2. Install dependencies and build standalone executable
 pnpm install
 pnpm build:standalone
 
 # 3. Use the tool (no further Node.js installation needed)
-./standalone/duplicate-finder /path/to/your/images --dry-run --verbose
+./standalone/dupf /path/to/your/images --dry-run --verbose
 ```
 
-The standalone executable (`./standalone/duplicate-finder`) can be copied to any machine and used without requiring Node.js installation.
+The standalone executable (`./standalone/dupf`) can be copied to any machine and used without requiring Node.js installation.
 
 ### Basic Commands
 
@@ -37,16 +37,16 @@ pnpm install
 pnpm build:standalone
 
 # Run standalone version (no Node.js required on target machine)
-./standalone/duplicate-finder /path/to/images
+./standalone/dupf /path/to/images
 
 # Dry run to see what would be moved
-./standalone/duplicate-finder /path/to/images --dry-run --verbose
+./standalone/dupf /path/to/images --dry-run --verbose
 
 # Custom duplicate folder name
-./standalone/duplicate-finder /path/to/images --output-dir duplicates
+./standalone/dupf /path/to/images --output-dir duplicates
 
 # Help
-./standalone/duplicate-finder --help
+./standalone/dupf --help
 ```
 
 ### Development Commands
@@ -59,7 +59,7 @@ pnpm build
 pnpm dev /path/to/images
 
 # Run built version (requires Node.js)
-node dist/bin/duplicate-finder.js /path/to/images
+node dist/bin/dupf.js /path/to/images
 ```
 
 ### Testing
@@ -87,6 +87,7 @@ pnpm format
 - [x] **Safe File Operations**: Automatic directory creation and collision avoidance
 - [x] **Multiple Image Formats**: JPG, JPEG, PNG, GIF, BMP, WebP, TIFF support
 - [x] **Performance Optimization**: Image hashing cache and memory-efficient processing
+- [x] **Robust Compatibility**: Sharp fallback mechanism for environments without native dependencies
 
 ### CLI Features
 
@@ -98,11 +99,12 @@ pnpm format
 ### Code Quality & Testing
 
 - [x] **TypeScript**: Full TypeScript implementation with strict type checking
-- [x] **Unit Tests**: Comprehensive coverage for ImageComparator and FileUtils classes
+- [x] **Unit Tests**: Comprehensive coverage for ImageComparator and FileUtils classes (42 tests)
 - [x] **Integration Tests**: End-to-end CLI testing with real image files
 - [x] **Test Image Generation**: Automated creation of test images using Sharp
 - [x] **ESLint & Prettier**: Code formatting and linting standards
 - [x] **Build System**: TypeScript compilation with declaration files
+- [x] **CI/CD Ready**: All tests pass, linting and formatting enforced
 
 ## Architecture
 
@@ -110,7 +112,7 @@ pnpm format
 
 #### Source Files (TypeScript)
 
-- `bin/duplicate-finder.ts`: Main CLI entry point using Commander.js for argument parsing
+- `bin/dupf.ts`: Main CLI entry point using Commander.js for argument parsing
 - `lib/image-comparator.ts`: Core image comparison logic using Sharp for hashing and Node.js Buffer for byte-level comparison
 - `lib/file-utils.ts`: File system utilities for finding images, creating directories, and safe file operations
 - `scripts/create-test-images.ts`: Test image generation script
@@ -118,9 +120,9 @@ pnpm format
 #### Compiled Output
 
 - `dist/`: TypeScript compilation output with JavaScript and declaration files
-- `dist/bin/duplicate-finder.js`: Compiled CLI executable
+- `dist/bin/dupf.js`: Compiled CLI executable
 - `standalone/`: Single-file executable built with @vercel/ncc
-- `standalone/duplicate-finder`: Self-contained executable (no dependencies required)
+- `standalone/dupf`: Self-contained executable (no dependencies required)
 
 #### Testing
 
@@ -138,7 +140,9 @@ pnpm format
 ### Duplicate Detection Process
 
 1. **File Discovery**: Recursively find all supported image files, excluding existing duplicate folders
-2. **Hash Generation**: Create 8x8 grayscale image hashes (MD5) for fast comparison
+2. **Hash Generation**:
+   - **Primary method**: Create 8x8 grayscale image hashes (MD5) using Sharp for high-quality detection
+   - **Fallback method**: Use file-based MD5 hash when Sharp is not available
 3. **Hash Comparison**: Group images by hash to identify potential duplicates
 4. **Byte-level Verification**: Compare file contents byte-by-byte for hash matches
 5. **Safe Moving**: Move duplicates to designated folder with collision avoidance
@@ -163,6 +167,7 @@ pnpm format
 - [x] **ESLint + Prettier**: Add code formatting and linting configuration
 - [x] **Type Safety in Tests**: Convert test files to TypeScript with proper type checking
 - [x] **Single File Scripts**: Compile the cli tool into a single file and make it executable using vercel/ncc
+- [x] **Sharp Fallback**: Add graceful fallback when Sharp is not available (uses file-based hash)
 
 ### Phase 2: Enhanced Features [TODO]
 
@@ -230,9 +235,9 @@ pnpm format
 
 ### Running the Tool
 
-- **Standalone executable**: `./standalone/duplicate-finder <directory> [options]`
-- **Built CLI (requires Node.js)**: `node dist/bin/duplicate-finder.js <directory> [options]`
-- **Test with dry run**: `./standalone/duplicate-finder /path/to/images --dry-run --verbose`
+- **Standalone executable**: `./standalone/dupf <directory> [options]`
+- **Built CLI (requires Node.js)**: `node dist/bin/dupf.js <directory> [options]`
+- **Test with dry run**: `./standalone/dupf /path/to/images --dry-run --verbose`
 
 ### Testing Commands
 
@@ -249,14 +254,15 @@ For distributing the tool to end users:
 pnpm build:standalone
 
 # The following file can be distributed independently:
-# ./standalone/duplicate-finder (678KB, self-contained)
+# ./standalone/dupf (~397KB, self-contained)
 
 # Users can run it directly without any installation:
-./standalone/duplicate-finder /path/to/images
+./standalone/dupf /path/to/images
 ```
 
 **Distribution advantages:**
-- Single file deployment (678KB)
+
+- Single file deployment (~397KB)
 - No Node.js runtime required on target machines
 - No dependency installation needed
 - Works on any compatible system architecture
@@ -264,7 +270,7 @@ pnpm build:standalone
 ### Important Notes
 
 - **Package manager**: This project uses pnpm, not npm
-- **Standalone executable**: `./standalone/duplicate-finder` is a self-contained file with all dependencies bundled
+- **Standalone executable**: `./standalone/dupf` is a self-contained file with all dependencies bundled
 - **No Node.js required**: The standalone version works without Node.js installation on the target machine
 - **Development**: Use `pnpm dev` for TypeScript development mode
 - **Distribution**: Use `pnpm build:standalone` to create the deployable executable

@@ -1,11 +1,11 @@
 {
-  "name": "image-duplicate-finder",
+  "name": "dupf",
   "version": "1.0.0",
   "description": "CLI tool to find and move duplicate images",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "duplicate-finder": "./standalone/duplicate-finder"
+    "dupf": "./standalone/dupf"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^1.0.5",
@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:standalone": "pnpm build && ncc build dist/bin/duplicate-finder.js -o standalone --target es2022 && cp standalone/index.js standalone/duplicate-finder && chmod +x standalone/duplicate-finder",
+    "build:standalone": "pnpm build && ncc build dist/bin/duplicate-finder.js -o standalone --target es2022 --source-map --license licenses.txt && cp standalone/index.js standalone/dupf && chmod +x standalone/dupf",
     "dev": "tsx bin/duplicate-finder.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
