@@ -31,16 +31,16 @@ pnpm build:standalone
 
 ```bash
 # 基本的な使用方法
-./standalone/dupf /path/to/images
+./dupf /path/to/images
 
 # ドライラン（実際には移動せず、何が移動されるかを表示）
-./standalone/dupf /path/to/images --dry-run --verbose
+./dupf /path/to/images --dry-run --verbose
 
 # カスタム重複フォルダ名
-./standalone/dupf /path/to/images --output-dir duplicates
+./dupf /path/to/images --output-dir duplicates
 
 # ヘルプを表示
-./standalone/dupf --help
+./dupf --help
 ```
 
 ## インストール方法
