@@ -1,0 +1,40 @@
+{
+  "name": "image-duplicate-finder",
+  "version": "1.0.0",
+  "description": "CLI tool to find and move duplicate images",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "duplicate-finder": "./standalone/duplicate-finder"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.5",
+    "sharp": "^0.33.0",
+    "commander": "^11.0.0",
+    "glob": "^10.0.0",
+    "cli-progress": "^3.12.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "prettier": "^3.0.0",
+    "@vercel/ncc": "^0.38.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:standalone": "pnpm build && ncc build dist/bin/duplicate-finder.js -o standalone --target es2022 && cp standalone/index.js standalone/duplicate-finder && chmod +x standalone/duplicate-finder",
+    "dev": "tsx bin/duplicate-finder.ts",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "format": "prettier --write ."
+  }
+}
