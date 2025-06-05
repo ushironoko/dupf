@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander';
-import path from 'path';
-import fs from 'fs/promises';
-import ImageComparator from '../lib/image-comparator.js';
-import FileUtils from '../lib/file-utils.js';
+import fs from "node:fs/promises";
+import path from "node:path";
+import { Command } from "commander";
+import {
+  findImageFiles,
+  generateDuplicatePath,
+  getUniqueFileName,
+  moveFile,
+} from "../lib/file-utils.js";
+import { findDuplicates } from "../lib/image-comparator.js";
 
 interface CliOptions {
   outputDir: string;
@@ -15,20 +20,20 @@ interface CliOptions {
 const program = new Command();
 
 program
-  .name('dupf')
-  .description('Find and move duplicate images to a duplicate folder')
-  .version('1.0.0')
-  .argument('<directory>', 'Directory to scan for duplicate images')
+  .name("dupf")
+  .description("Find and move duplicate images to a duplicate folder")
+  .version("1.0.0")
+  .argument("<directory>", "Directory to scan for duplicate images")
   .option(
-    '-o, --output-dir <dir>',
+    "-o, --output-dir <dir>",
     'Name of duplicate folder (default: "duplicate")',
-    'duplicate'
+    "duplicate",
   )
   .option(
-    '-d, --dry-run',
-    'Show what would be moved without actually moving files'
+    "-d, --dry-run",
+    "Show what would be moved without actually moving files",
   )
-  .option('-v, --verbose', 'Show detailed output')
+  .option("-v, --verbose", "Show detailed output")
   .action(async (directory: string, options: CliOptions) => {
     try {
       const targetDir = path.resolve(directory);
@@ -48,41 +53,40 @@ program
       if (options.verbose) {
         console.log(`Scanning directory: ${targetDir}`);
         console.log(`Duplicate folder: ${options.outputDir}`);
-        console.log(`Dry run: ${options.dryRun ? 'Yes' : 'No'}`);
-        console.log('');
+        console.log(`Dry run: ${options.dryRun ? "Yes" : "No"}`);
+        console.log("");
       }
 
-      console.log('Finding image files...');
-      const imageFiles = await FileUtils.findImageFiles(targetDir);
+      console.log("Finding image files...");
+      const imageFiles = await findImageFiles(targetDir);
 
       if (imageFiles.length === 0) {
-        console.log('No image files found in the specified directory.');
+        console.log("No image files found in the specified directory.");
         return;
       }
 
       console.log(`Found ${imageFiles.length} image files.`);
-      console.log('Comparing images for duplicates...');
+      console.log("Comparing images for duplicates...");
 
-      const comparator = new ImageComparator();
-      const duplicates = await comparator.findDuplicates(imageFiles);
+      const duplicates = await findDuplicates(imageFiles);
 
       if (duplicates.length === 0) {
-        console.log('No duplicate images found.');
+        console.log("No duplicate images found.");
         return;
       }
 
       console.log(`Found ${duplicates.length} duplicate image(s).`);
-      console.log('');
+      console.log("");
 
       for (const duplicatePair of duplicates) {
         const { original, duplicate } = duplicatePair;
-        const duplicatePath = FileUtils.generateDuplicatePath(
+        const duplicatePath = generateDuplicatePath(
           duplicate,
-          options.outputDir
+          options.outputDir,
         );
-        const finalPath = await FileUtils.getUniqueFileName(duplicatePath);
+        const finalPath = await getUniqueFileName(duplicatePath);
 
-        console.log(`Duplicate found:`);
+        console.log("Duplicate found:");
         console.log(`  Original: ${original}`);
         console.log(`  Duplicate: ${duplicate}`);
 
@@ -90,30 +94,30 @@ program
           console.log(`  Would move to: ${finalPath}`);
         } else {
           try {
-            await FileUtils.moveFile(duplicate, finalPath);
+            await moveFile(duplicate, finalPath);
             console.log(`  Moved to: ${finalPath}`);
           } catch (error) {
             const errorMessage =
-              error instanceof Error ? error.message : 'Unknown error';
+              error instanceof Error ? error.message : "Unknown error";
             console.error(`  Error moving file: ${errorMessage}`);
           }
         }
-        console.log('');
+        console.log("");
       }
 
       if (options.dryRun) {
         console.log(
-          `Dry run completed. ${duplicates.length} duplicate(s) would be moved.`
+          `Dry run completed. ${duplicates.length} duplicate(s) would be moved.`,
         );
       } else {
         console.log(
-          `Process completed. ${duplicates.length} duplicate(s) moved to ${options.outputDir} folder.`
+          `Process completed. ${duplicates.length} duplicate(s) moved to ${options.outputDir} folder.`,
         );
       }
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      console.error('Error:', errorMessage);
+        error instanceof Error ? error.message : "Unknown error";
+      console.error("Error:", errorMessage);
       process.exit(1);
     }
   });

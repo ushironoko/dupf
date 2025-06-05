@@ -1,9 +1,9 @@
-import sharp from 'sharp';
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "node:fs/promises";
+import path from "node:path";
+import sharp from "sharp";
 
 async function createTestImages(): Promise<void> {
-  const testDir = path.join(process.cwd(), 'tests', 'features', 'images');
+  const testDir = path.join(process.cwd(), "tests", "features", "images");
 
   // Remove existing test images directory completely
   try {
@@ -52,17 +52,17 @@ async function createTestImages(): Promise<void> {
     .toBuffer();
 
   // Save test images
-  await fs.writeFile(path.join(testDir, 'red-square.png'), redSquare);
-  await fs.writeFile(path.join(testDir, 'red-square-duplicate.png'), redSquare); // Exact duplicate
-  await fs.writeFile(path.join(testDir, 'blue-square.png'), blueSquare);
-  await fs.writeFile(path.join(testDir, 'green-square.png'), greenSquare);
+  await fs.writeFile(path.join(testDir, "red-square.png"), redSquare);
+  await fs.writeFile(path.join(testDir, "red-square-duplicate.png"), redSquare); // Exact duplicate
+  await fs.writeFile(path.join(testDir, "blue-square.png"), blueSquare);
+  await fs.writeFile(path.join(testDir, "green-square.png"), greenSquare);
 
   // Create JPEG versions
   const redSquareJpeg = await sharp(redSquare).jpeg().toBuffer();
   const blueSquareJpeg = await sharp(blueSquare).jpeg().toBuffer();
 
-  await fs.writeFile(path.join(testDir, 'red-square.jpg'), redSquareJpeg);
-  await fs.writeFile(path.join(testDir, 'blue-square.jpg'), blueSquareJpeg);
+  await fs.writeFile(path.join(testDir, "red-square.jpg"), redSquareJpeg);
+  await fs.writeFile(path.join(testDir, "blue-square.jpg"), blueSquareJpeg);
 
   // Create a slightly different red square (different compression but visually similar)
   const redSquareDifferent = await sharp({
@@ -77,11 +77,11 @@ async function createTestImages(): Promise<void> {
     .toBuffer();
 
   await fs.writeFile(
-    path.join(testDir, 'red-square-similar.png'),
-    redSquareDifferent
+    path.join(testDir, "red-square-similar.png"),
+    redSquareDifferent,
   );
 
-  console.log('Test images created successfully in tests/features/images/');
+  console.log("Test images created successfully in tests/features/images/");
 }
 
 createTestImages().catch(console.error);
