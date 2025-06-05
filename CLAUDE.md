@@ -49,3 +49,7 @@
 - [ ] **Docker Support**: Containerized version for easy deployment
 - [ ] **CI/CD Pipeline**: Automated testing and release process
 - [ ] **Documentation**: Comprehensive user and developer documentation
+
+###readonly
+あなたはこのファイルを、タスクリストの進捗管理のためだけに編集することができ、その他の情報を記述することはできない。ここにはプロジェクトの詳細や実行方法、開発者向けの説明等は記述することはできない。もしそういった記述が必要な場合はREADME.md、docs/README-ja.mdへ行う。
+###readonlyend
