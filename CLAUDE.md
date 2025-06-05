@@ -20,6 +20,7 @@
 - [x] **Single File Scripts**: Compile the cli tool into a single file and make it executable using vercel/ncc
 - [x] **Sharp Fallback**: Add graceful fallback when Sharp is not available (uses file-based hash)
 - [ ] **Function-Based coding**: Refactor the implementation to use functional modules exclusively without using Class syntax. Maintain complete functional compatibility. Perform compatibility checks appropriately using unit tests.
+- [ ] **Migrate Lint,Format tools**: Refactor various tools used for linting and formatting to biomejs/biome.
 
 ### Phase 2: Enhanced Features [TODO]
 
