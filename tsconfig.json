@@ -15,5 +15,5 @@
     "types": ["node", "vitest/globals"]
   },
   "include": ["bin/**/*", "lib/**/*", "tests/**/*", "scripts/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "standalone"]
 }

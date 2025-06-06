@@ -25,15 +25,13 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:standalone": "pnpm build && ncc build dist/bin/dupf.js -o standalone --target es2022 --source-map --license licenses.txt && cp standalone/index.js standalone/dupf && chmod +x standalone/dupf",
+    "build:standalone": "pnpm build && ncc build dist/bin/dupf.js -m -o standalone --target es2022 && cp standalone/index.js standalone/dupf && chmod +x standalone/dupf",
     "dev": "tsx bin/dupf.ts",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:setup": "tsx scripts/create-test-images.ts",
     "test:full": "pnpm test:setup && pnpm test:run",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "tsc": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   }
 }
